@@ -1,0 +1,131 @@
+<template>
+    <template if:true={previewImage}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+             
+                <!-- modal header start -->
+               <header class="slds-modal__header">
+                  <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                     <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                     <span class="slds-assistive-text">Close</span>
+                  </button>
+                  <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Preview</h2>
+               </header>
+           
+               <!-- modal body start -->
+               <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <template if:false={previewIsLoading}>
+                        <img
+                        src={imageURL}
+                        alt="User Image"
+                        />
+                        <!-- <iframe
+                        src={imageURL}
+                        style="width: 100%; height: 800px"
+                    ></iframe> -->
+                    </template>
+                    <template if:true={previewIsLoading}>
+                        <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+                    </template>
+                    <!-- <div class="slds-text-align_center">{previewImageFile.name}</div> -->
+               </div>
+     
+               <!-- modal footer start-->
+               <footer class="slds-modal__footer">
+                <template if:true={previewIsLoading}>
+                    <div class="slds-grid slds-grid_reverse slds-p-bottom_x-small" id="progress-bar-label-id-4">
+                        <span aria-hidden="true">
+                            <strong>{progressbarValue}% Complete</strong>
+                        </span>
+                    </div>
+                    <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={progressbarValue}
+                        aria-labelledby="progress-bar-label-id-4"
+                        role="progressbar">
+                        <span class="slds-progress-bar__value" style={progressbarValueStyle}>
+                            <span class="slds-assistive-text">Progress: {progressbarValue}%</span>
+                        </span>
+                    </div>
+                </template>
+                <template if:false={previewIsLoading}>
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size--4-of-12">
+                            <div class="slds-float_left">  Est. Updated Size: <b>{previewImageFileSize}</b></div>
+                        </div>
+                        <div class="slds-col slds-size--4-of-12">
+                            
+                        </div>
+                        <div class="slds-col slds-size--4-of-12">
+                            <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                        </div>
+                    </div>
+                </template>
+               </footer>
+            
+            </div>
+         </section>
+         <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <lightning-card title="File Upload">
+        <div class="slds-m-horizontal_x-small">
+            <lightning-input type="toggle" label="Compress and Upload Image Files" message-toggle-active="" message-toggle-inactive="" onchange={handleToggelChange} checked={toggleValue}></lightning-input>
+
+            <template if:true={toggleValue}>
+                <c-upload-and-compress record-id={recordId} 
+                    compress-file={isCompressed}
+                    compress-file-ids={compressedfileId} 
+                    uploaded-file={isfileuploaded} 
+                    oncallpasstoparent={passToParent} 
+                    onsupportedfilesupload={handleSupportedFilesUpload}
+                    onpreview={handleImagePreview}
+                    button-click={buttonClick}>
+                </c-upload-and-compress>
+
+                <div class="slds-p-top_medium">
+                    <c-file-upload-checkboxes 
+                    onsettings={handleSettingsChange} 
+                    button-clicked={buttonClick}
+                    compress-done={isCompressed}>
+                    </c-file-upload-checkboxes>
+                </div>
+    
+                <div if:true={areSupportedFilesAvailable}>
+                    <div class="slds-p-top_medium">
+                        <lightning-button variant="brand" label="Save" title="Primary action" onclick={handleClick} disabled={saveDisabled}
+                        ></lightning-button>
+                    </div>
+                </div>
+
+                <div if:true={isLoading}>
+                    <div class="slds-p-around_x-small">
+                        <div class="slds-grid slds-grid_reverse slds-p-bottom_x-small" id="progress-bar-label-id-5">
+                            <span aria-hidden="true">
+                                <strong>{progressbarValue}% Complete</strong>
+                            </span>
+                        </div>
+                        <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={progressbarValue}
+                            aria-labelledby="progress-bar-label-id-5"
+                            role="progressbar">
+                            <span class="slds-progress-bar__value" style={progressbarValueStyle}>
+                                <span class="slds-assistive-text">Progress: {progressbarValue}%</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            
+            <template if:false={toggleValue}>
+                <lightning-file-upload
+                    accept={acceptedFormats}
+                    record-id={recordId}
+                    onuploadfinished={updateRecordView}
+                    multiple
+                >
+                </lightning-file-upload>
+            </template>
+        </div>
+    </lightning-card>
+</template>

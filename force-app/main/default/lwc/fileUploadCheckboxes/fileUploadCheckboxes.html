@@ -1,0 +1,138 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size--6-of-12 slds-p-right_x-small">
+            <!-- Compress -->
+            <!-- <div class="slds-box">
+                <lightning-input  type="checkbox" label="Compress" name="compress" checked={isCompressChecked} onchange={compressCheckboxToggel}></lightning-input>
+                <template if:true={isCompressChecked}>
+                    <lightning-combobox
+                        name="FileQuality"
+                        label="Quality"
+                        value={quality}
+                        options={options}
+                        onchange={handleQualityChange}
+                        required=true 
+                        >
+                    </lightning-combobox>
+                </template>
+            </div> -->
+            <!-- Resize -->
+            <div class="slds-box">
+                <lightning-input type="checkbox" label="Resize" name="resize" checked={isResizeChecked} onchange={resizeCheckboxToggel} ></lightning-input>
+                <template if:true={isResizeChecked}>
+                    <lightning-combobox 
+                        name="ImageResizeType" 
+                        label="Image Resize type" 
+                        value={imageResizeType}
+                        options={imageResizeTypeOptions}
+                        onchange={resizeCheckboxValue}
+                        required=true>
+                    </lightning-combobox>
+                
+                    <template if:true={isStandardChecked}>
+                        <lightning-combobox 
+                            name="Standard" 
+                            label="Image Size" 
+                            value={imageSize}
+                            options={imageResizeStandardOptions}
+                            onchange={handleImageSizeChange}
+                            required=true>
+                        </lightning-combobox>
+                    </template>
+
+                    <template if:true={isAutoChecked}>
+                        <lightning-combobox 
+                            name="Auto" 
+                            label="Image Manual Size" 
+                            value={imageAutoOption}
+                            options={imageResizeAutoOptions}
+                            onchange={resizeCheckboxAutoValueChange}
+                            required=true>
+                        </lightning-combobox>
+                        <div class="slds-grid slds-wrap slds-size--12-of-12">
+                            <template if:true={isPixelsSelected}>
+                                <div class="slds-col slds-size--6-of-12 slds-p-right_xx-small">
+                                    <lightning-input type="number" label="Pixels Height" value={pixelsHeight} onchange={handlePixelHeightChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size--6-of-12 ">
+                                    <lightning-input type="number" label="Pixels Width" value={pixelsWidth} onchange={handlePixelWidthChange}></lightning-input>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-size--12-of-12">
+                            <template if:true={isPercentSelected}>
+                                <div class="slds-col slds-size--6-of-12 slds-p-right_xx-small">
+                                    <lightning-input type="number" label="Percentage Height" value={percentageHeight} onchange={handlePercentHeightChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size--6-of-12 ">
+                                    <lightning-input type="number" label="Percentage Width" value={percentageWidth} onchange={handlePercentWidthChange}></lightning-input>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+        <!-- Watermark -->
+        <div class="slds-col slds-size--6-of-12 ">
+            <div class="slds-box">
+                <lightning-input type="checkbox" label="Watermark" name="watermark" checked={isWatermarkChecked} onchange={watermarkCheckboxToggel}></lightning-input>
+                <div class="slds-grid slds-wrap slds-size--12-of-12">
+                    <template if:true={isWatermarkChecked}>
+                        <div class="slds-col slds-size--12-of-12 slds-p-top_xx-small">
+                            <lightning-combobox label="Type Of Watermark?" value={typeWatermark} options={typeWatermarkOptions} onchange={watermarkTypeChange} required="true"></lightning-combobox>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-size--12-of-12">
+                            <template if:true={isTextWatermarkSelected}>
+                                <div class="slds-col slds-size--12-of-12">
+                                    <lightning-input label="Watermark Text" placeholder="Watermark Text here..." value={watermarkText} onchange={handleTextChange} required="true"></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size--4-of-12 ">
+                                    <lightning-input type="checkbox" label="Bold" value={boldText} onchange={handleBoldChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size--4-of-12 ">
+                                    <lightning-input type="checkbox" label="Italic" value={italicText} onchange={handleItalicChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size--4-of-12 ">
+                                    <lightning-input type="checkbox" label="Add date" value={dateWatermarkCheckbox} onchange={handleDateChange}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size--12-of-12 ">
+                                    <lightning-combobox name="DisplayWatermark" label="Text Watermark Position" value={watermarkTextPosition} onchange={handleTextPositionChange} options={Watermarkoptions} required="true"></lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size--6-of-12 slds-p-right_xx-small">
+                                    <lightning-combobox name="fontStyle" label="Font Style" value={fontStyle} options={fontStyleOptions} onchange={handleFontStyleChange} required="true"></lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size--6-of-12 ">      
+                                    <lightning-input type="color" name="input-color" label="Text Font Color" value={fontColor} onchange={handleFontColorChange} required="true"></lightning-input>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-size--12-of-12 slds-p-top_x-small">
+                            <template if:true={isImageWatermarkSelected}>
+                                <div class="slds-col slds-size--12-of-12">
+                                    <lightning-input aura:id="WatermarkedfileId"
+                                        name="Watermarkedfile" 
+                                        type="file" 
+                                        files={uploadWatermarkImage}
+                                        accept={accept}
+                                        label="Watermarked Image Upload"
+                                        onchange={handleImageUploadChange}
+                                        required="true">
+                                    </lightning-input>
+                                </div>
+                                <template if:true={watermarkImageUploaded}>
+                                    <div class="slds-col slds-size--6-of-12 slds-p-right_xx-small">
+                                        <lightning-input type="text" value={uplodedImageName} label="Uploaded Image" placeholder="No Image Uploaded" disabled></lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size--6-of-12">
+                                        <lightning-combobox name="displayImageWatermark" label="Image Watermark Position" value={watermarkImagePosition} options={WatermarkImageoptions} onchange={handleImagePositionChange} required="true"></lightning-combobox>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,22 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size--12-of-12 slds-p-right_x-small">
+            <lightning-input type="file" 
+                accept=".png,.jpeg,.jpg"
+                onchange={openfileUpload} multiple={multiple}>
+            </lightning-input>
+        </div>
+        <!-- <div class="slds-col slds-size--12-of-12 slds-p-right_x-small slds-p-top_x-small">
+
+        </div> -->
+        <div class="slds-col slds-size--12-of-12 slds-p-right_x-small">
+            <template if:true={areDetailsVisible}>
+                <div class="slds-p-top_small slds-p-bottom_x-small">
+                    <b>Selected Files:</b>                      
+                </div>
+                <lightning-datatable hide-checkbox-column data={lstAllFiles} columns={columns} key-field="id" onrowaction={handleRowAction}>
+                </lightning-datatable>
+            </template>
+        </div>
+    </div>
+</template>
